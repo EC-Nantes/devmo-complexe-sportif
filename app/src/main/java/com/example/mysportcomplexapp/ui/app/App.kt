@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,6 +34,13 @@ import com.example.mysportcomplexapp.ui.app.screens.PlanningScreen
 import com.example.mysportcomplexapp.ui.app.screens.ProfilScreen
 import com.example.mysportcomplexapp.ui.app.theme.BlueIndicator
 import com.example.mysportcomplexapp.ui.app.theme.Transparent
+
+@Preview
+@Composable
+fun test(){
+    App()
+}
+
 @Composable
 fun App(){
     val navController = rememberNavController()

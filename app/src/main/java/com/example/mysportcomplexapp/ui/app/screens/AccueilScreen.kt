@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mysportcomplexapp.R
 import com.example.mysportcomplexapp.ui.app.theme.TennisColor
 import com.example.mysportcomplexapp.ui.app.theme.FootballColor
@@ -28,6 +29,9 @@ import com.example.mysportcomplexapp.ui.app.theme.GymColor
 import com.example.mysportcomplexapp.ui.app.theme.EscaladeColor
 
 import com.example.mysportcomplexapp.ui.app.Sport
+
+
+
 @Composable
 fun test(navController: NavHostController) {
     Column(
