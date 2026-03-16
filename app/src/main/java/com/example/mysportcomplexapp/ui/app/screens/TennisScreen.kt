@@ -98,7 +98,7 @@ fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = 
 
 
             ) {
-                // Image de fond terrain (floutée / opacifiée)
+
                 Image(
                     painter = painterResource(id = R.drawable.terrain_de_tennis),
                     contentDescription = null,
@@ -115,7 +115,7 @@ fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = 
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Logo tennis avec ombre et bordure arrondie
+
                     Surface(
                         shape = CircleShape,
                         shadowElevation = 8.dp,
@@ -129,7 +129,7 @@ fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = 
                         )
                     }
 
-                    // Texte avec style
+
                     Column {
                         Text(
                             text = "Tennis",
@@ -151,10 +151,16 @@ fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = 
 
             }
         }
+
+                
+
+
+        }
+        
         item{
             Button(onClick = {viewModel.changeDate()},
                     colors= ButtonDefaults.buttonColors(containerColor=Color.Black,contentColor=Color.White)){Text(
-            text = "Le : $date",
+            text = "Le: $date / Appuyer pour changer de date",
             fontSize = 14.sp,
             fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,
