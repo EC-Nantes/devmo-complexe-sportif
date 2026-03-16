@@ -129,7 +129,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
 
         composable("tennis") { TennisScreen(navController) }
 
-        composable("resa") { ResaScreen(navController) }
+        composable("reservation") { ResaScreen(navController) }
 
         composable("club") { ClubScreen() }
 

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -30,7 +31,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.sp
+
+import java.util.Date
+import java.util.Locale
+import java.text.SimpleDateFormat
+
 
 
 @Preview(showBackground = true)
@@ -41,6 +53,42 @@ fun Test(){
 @Composable
 fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
+    var selected by remember { mutableStateOf(1) }
+    val purple = Color(0xFF534AB7)
+    val price = 20
+    val date = remember {
+        SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(Date())
+    }
+    if (uiState.showAddUserDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.onDismissAddUserDialog() },
+            title = { Text("Ajouter un utilisateur") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = uiState.nom,
+                        onValueChange = { viewModel.onNomChanged(it) },
+                        label = { Text("Nom") }
+                    )
+                    OutlinedTextField(
+                        value = uiState.prenom,
+                        onValueChange = { viewModel.onPrenomChanged(it) },
+                        label = { Text("Prénom") }
+                    )
+                }
+            },
+            confirmButton = {
+                Button(onClick = { viewModel.add() }) {
+                    Text("Ajouter")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.onDismissAddUserDialog() }) {
+                    Text("Annuler")
+                }
+            }
+        )
+    }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -53,14 +101,18 @@ fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = vi
                     .border(1.dp, Color.Gray)
                     .padding(4.dp)
             ) {
-                Text(text = "Mercredi 11 Mars ${uiState.selectedSlot?.label}")
+                Text(text =date)
 
             }
 
-            Box(
+            Button(onClick = {selected=1},
                 modifier = Modifier
-                    .border(1.dp, Color.Gray)
                     .padding(4.dp)
+                        ,colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selected == 1) purple else Color.Transparent,
+                contentColor = if (selected == 1) Color.White else purple
+            ),
+                border = androidx.compose.foundation.BorderStroke(2.dp, purple)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally){
@@ -68,10 +120,12 @@ fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = vi
                 Text(text = "1h",textAlign = TextAlign.Center,
                     )}
             }
-            Box(
+            Button(onClick = {selected=2},
                 modifier = Modifier
-                    .border(1.dp, Color.Gray)
-                    .padding(4.dp)
+                    .padding(4.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = if (selected == 2) purple else Color.Transparent,
+                contentColor = if (selected == 2) Color.White else purple),
+                border = androidx.compose.foundation.BorderStroke(2.dp, purple)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally) {
@@ -84,9 +138,10 @@ fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = vi
 
 
         Column(
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
                 .border(1.dp, Color.Gray)
                 .padding(16.dp).width(120.dp),
+
             verticalArrangement = Arrangement.spacedBy(2.dp)
 
         ) {
@@ -102,7 +157,7 @@ fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = vi
                     Text(text = "Moi")
                 }
 
-                Text(text = " Prix : 20€ ")//${uiState.price}=20€
+                Text(text = " Prix "+price*selected+"€")
 
             }
             Text(text = "Terrain : ${uiState.selectedCourt?.name}")
@@ -114,16 +169,22 @@ fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = vi
                 thickness = 4.dp,
                 color = Color.Gray
             )
-            Row() {
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Row() {
                     Text(text = "✅")
                     Text(text = "Moi")
                 }
+                Button(onClick = {viewModel.add()}){
+                    Text(text="➕ Ajouter un utilisateur")
+                }
+            }
+
 
         }
 
         Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.TopCenter
         ){
-            Text(text = "Total: 20€",)//${uiState.price}=20€
+            Text(text = "Total: "+price*selected+"€",fontSize=50.sp)//${uiState.price}=20€
         }
 
 
@@ -137,7 +198,7 @@ fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = vi
         }
         
         Button(
-            onClick = { viewModel.onConfirmReservation() },
+            onClick = { viewModel.onDismissReservationDialog(navController) },
             modifier = Modifier.fillMaxWidth(),
             colors=ButtonDefaults.buttonColors(Color.Red)//rouge
         ) {

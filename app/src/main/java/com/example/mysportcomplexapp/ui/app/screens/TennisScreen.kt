@@ -32,12 +32,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.text.style.TextOverflow
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import com.example.mysportcomplexapp.ui.app.theme.TennisColor
+
 
 
 @Preview(showBackground = true)
@@ -46,9 +53,14 @@ import androidx.compose.ui.text.style.TextOverflow
 fun TennisBookingScreenPreview() {
     TennisScreen(navController=rememberNavController())
 }
+
 @Composable
 fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
+    val date = remember {
+        SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(Date())
+    }
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .border(1.dp, Color.Gray)
@@ -58,8 +70,10 @@ fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = 
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         stickyHeader {
-            Text(text = "Tennis",fontSize=16.sp)//rajouter de la couleur Color=TennisColor.colorSpace
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)){
+
+
+            //rajouter de la couleur Color=TennisColor.colorSpace
+            Row(horizontalArrangement = Arrangement.spacedBy(20.dp)){
 
             Image(
                 painter = painterResource(id = R.drawable.tennis),
@@ -69,15 +83,24 @@ fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = 
 
             contentScale = ContentScale.Crop
             )
-            Image(
-                painter = painterResource(id = R.drawable.terrain_de_tennis),
-                contentDescription = "Tennis image",
-                modifier = Modifier,
-
-                contentScale = ContentScale.Crop
-            ) }}
+                Box(modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center) {
 
 
+
+                    Image(
+                        painter = painterResource(id = R.drawable.terrain_de_tennis),
+                        contentDescription = "Tennis image",
+                        modifier = Modifier,
+
+                        contentScale = ContentScale.Crop
+                    )
+                    Text(text = "Tennis", fontSize = 52.sp,textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth())
+                }
+            }}
+
+        item{Text(text = "Le : " + date)}
         items(uiState.courts) { court ->
 
                 Column() {
@@ -86,6 +109,7 @@ fun TennisScreen(navController: NavHostController, viewModel: TennisViewModel = 
                             .fillMaxWidth()
                             .border(1.dp, Color.Gray)
                             .padding(16.dp)
+
                     ) {
                         Column() {
                             Text(

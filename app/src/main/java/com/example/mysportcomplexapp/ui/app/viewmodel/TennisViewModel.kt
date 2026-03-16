@@ -1,5 +1,6 @@
 package com.example.mysportcomplexapp.ui.app.viewmodel
 
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,14 +13,14 @@ import kotlinx.coroutines.flow.update
 data class TimeSlot(
     val id: String,
     val label: String,
-    val isAvailable: Boolean //enlever ou grisé
+    val isAvailable: Boolean
 )
 
 data class TennisCourt(
     val id: String,
     val name: String,
     val isIndoor: Boolean,
-    val timeSlots: List<TimeSlot> // liste à afficher avec les ids button cliquable
+    val timeSlots: List<TimeSlot>
 )
 
 data class Reservation(
@@ -36,9 +37,14 @@ data class TennisUiState(
     val reservations: List<Reservation> = emptyList(),
     val selectedCourt: TennisCourt? = null,
     val selectedSlot: TimeSlot? = null,
+    val selectedHours:String?="",
     val showReservationDialog:Boolean=true,
     val playerName: String = "",
-    val confirmationMessage: String? = null,
+    //ajout en plus de la base
+    val showAddUserDialog: Boolean = false,
+    val nom: String = "",
+    val prenom: String = ""
+
 
     )
 
@@ -60,7 +66,7 @@ class TennisViewModel : ViewModel() {
                 isIndoor = false,
                 timeSlots = listOf(
                     TimeSlot("t1_10", "10h00", true),
-                    TimeSlot("t1_12", "12h00", true),
+                    TimeSlot("t1_12", "12h00", false),
                     TimeSlot("t1_13", "13h00", true),
                     TimeSlot("t1_19", "19h00", true),
                 )
@@ -71,7 +77,7 @@ class TennisViewModel : ViewModel() {
                 isIndoor = false,
                 timeSlots = listOf(
                     TimeSlot("t2_10", "10h00", true),
-                    TimeSlot("t2_18", "18h00", true),
+                    TimeSlot("t2_18", "18h00", false),
                 )
             ),
             TennisCourt(
@@ -81,7 +87,7 @@ class TennisViewModel : ViewModel() {
                 timeSlots = listOf(
                     TimeSlot("t3_10", "10h00", true),
                     TimeSlot("t3_12", "12h00", true),
-                    TimeSlot("t3_15", "15h00", true),
+                    TimeSlot("t3_15", "15h00", false),
                     TimeSlot("t3_17", "17h00", true),
                 )
             ),
@@ -102,12 +108,13 @@ class TennisViewModel : ViewModel() {
 
 
 
-
+//choix de l'horaire et du terrain
     fun onSlotClicked(court: TennisCourt, slot: TimeSlot,navController: NavController) {
         _uiState.update {
             it.copy(
                 selectedCourt = court,
                 selectedSlot = slot,
+                selectedHours=slot.label,
                 showReservationDialog = true
             )
         }
@@ -116,14 +123,31 @@ class TennisViewModel : ViewModel() {
 
 
 
+    fun onDismissAddUserDialog(){
+        _uiState.update {
+            it.copy(
+                showAddUserDialog = false,
+                nom = "null",
+                prenom = "null",
+            )
+        }
+    }
+
+
     fun onConfirmReservation() {
         val state = _uiState.value
         val court = state.selectedCourt ?: return
         val slot = state.selectedSlot ?: return
 
 
+    }
 
-    fun onDismissReservationDialog() {
+    fun add() {
+        val state = _uiState.value
+        // votre logique d'ajout ici
+        _uiState.update { it.copy(showAddUserDialog = true, nom = "", prenom = "") }
+    }
+    fun onDismissReservationDialog(navController: NavController) {
         _uiState.update {
             it.copy(
                 showReservationDialog = false,
@@ -131,13 +155,22 @@ class TennisViewModel : ViewModel() {
                 selectedSlot = null
             )
         }
+        navController.navigate("tennis")
+    }
+    fun onNomChanged(nom: String) {
+        _uiState.update { it.copy(nom = nom) }
     }
 
-    fun onDismissConfirmation() {
-        _uiState.update { it.copy(confirmationMessage = null) }
+    fun onPrenomChanged(prenom: String) {
+        _uiState.update { it.copy(prenom = prenom) }
     }
 
+
+
+
+
+
 }
-}
+
 
 
