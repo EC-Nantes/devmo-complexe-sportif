@@ -42,6 +42,7 @@ data class TennisUiState(
     val playerName: String = "",
     //ajout en plus de la base
     val showAddUserDialog: Boolean = false,
+    val showChangeDateDialog: Boolean = false,
     val nom: String = "",
     val prenom: String = ""
 
@@ -163,6 +164,9 @@ class TennisViewModel : ViewModel() {
 
     fun onPrenomChanged(prenom: String) {
         _uiState.update { it.copy(prenom = prenom) }
+    }
+    fun changeDate(){
+        _uiState.update { it.copy(showChangeDateDialog = true)}
     }
 
 
