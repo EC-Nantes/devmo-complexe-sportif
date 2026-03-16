@@ -188,22 +188,22 @@ fun ResaScreen(navController: NavHostController, viewModel: TennisViewModel = vi
         }
 
 
-        Column(){
-        Button(
-            onClick = { viewModel.onConfirmReservation() },
-            modifier = Modifier.fillMaxWidth(),
-            colors=ButtonDefaults.buttonColors(Color.Green)//vert
-        ) {
-            Text("Confirmer la réservation")
-        }
-        
-        Button(
-            onClick = { viewModel.onDismissReservationDialog(navController) },
-            modifier = Modifier.fillMaxWidth(),
-            colors=ButtonDefaults.buttonColors(Color.Red)//rouge
-        ) {
-            Text("Annuler la réservation")
-        }
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)){
+            Button(
+                onClick = { viewModel.onConfirmReservation() },
+                modifier = Modifier.fillMaxWidth(),
+                colors=ButtonDefaults.buttonColors(Color.Green)//vert
+            ) {
+                Text("Confirmer la réservation")
+            }
+            
+            Button(
+                onClick = { viewModel.onDismissReservationDialog(navController) },
+                modifier = Modifier.fillMaxWidth(),
+                colors=ButtonDefaults.buttonColors(Color.Red)//rouge
+            ) {
+                Text("Annuler la réservation")
+            }
 
     }}
 
